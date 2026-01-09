@@ -1,4 +1,5 @@
 # LD 1st Financial Calculator
+import time
 
 # OVERVIEW
 # How long it will take to save for a goal based on a weekly or monthly deposit
@@ -55,5 +56,33 @@ def saving():
 # Tip: Get the amount and how much of a tip they want to leave. Tell user tip amount and what the final total would then be
 
 # Greet: Greet the user and have a menu corresponding to the different calculations that could be done
+def greet():
+    name = input("Welcome! Before continuing, what is your name?\n").strip().title()
+    while True:
+        time.sleep(2)
+        print(f"\nWelcome {name}! What kind of calculation would you like to preform?")
+        print("(1) Time for a Saving Goal\n(2) Calculate Compound Intrest on a Deposit\n(3) Budget based on Salary\n(4) Calculate Price for an Item on Sale\n(5) Calculate a Tip to Leave\n(6) Leave Program")
+        choice = int(input("Enter the number corresponding to what you want to do.\n"))
+        if choice == 1:
+            saving()
+        elif choice == 2:
+            # call coumpond intrest
+            pass
+        elif choice == 3:
+            # call budget
+            pass
+        elif choice == 4:
+            # call sale
+            pass
+        elif choice == 5:
+            # call tip
+            pass
+        elif choice == 6:
+            # user is leaving
+            print("Hope this was helpful for your calculations!\nGoodbye!")
+            break
+        else:
+            print("That doesn't seem to be a valid input. Please try again.")
+            continue
 
-saving()
+greet()
