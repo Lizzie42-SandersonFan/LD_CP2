@@ -56,9 +56,10 @@ def compound():
     get_years = float(input("How many years are you leaving the money in for? Type a number and omit commas.\n"))
     years = round(get_years, 2)
     # Get the intrest rate
-    get_intrest = float(input("What is the intrest rate? Enter as a decimal.\n"))
-    intrest = round(get_intrest, 2)
-    int_intrest = intrest*100
+    get_intrest = float(input("What is the intrest rate? Omit '%'.\n"))
+    percent = toPercent(get_intrest)
+    intrest = round(percent, 2)
+    #int_intrest = intrest*100
 
     # Setting up the parts to be used in equation
     def equation():
@@ -73,8 +74,7 @@ def compound():
     end = equation()
 
     # Tell how many weeks
-    print(f"If you leave ${money} in for {years} years with an intrest rate of {int_intrest}%, you will have ${end:,}.")
-    # Call greet func
+    print(f"If you leave ${money} in for {years} years with an intrest rate of {get_intrest}%, you will have ${end:,}.")
 
 # Budget allocator: Get user's catigories and percent for each one, as well as salary. Make sure percents are exactly 100. divide salary into different catigories then tell the user what the math results are
 def budget(): # NOT DONE YET
@@ -83,16 +83,17 @@ def budget(): # NOT DONE YET
     percents = []
     budgets = []
     # Get user's salary
-    salary = float(input("What is your monthly salary?\n"))
+    salary = float(input("What is your monthly salary? Omit '$' and commas\n"))
     # Ask user how many different catigories they want to budget for
     num_of_catigories = int(input("How many catigories do you want to budget for? (Enter whole number)\n"))
     while True:
         # Do a loop based on number of catigories
         for x in range(num_of_catigories):
-            catigory = input(f"What is the name of the {x+1} catigory?\n")
+            catigory = input(f"What is the name of the {x+1} catigory?\n").strip().capitalize()
             catigories.append(catigory)
         for y in catigories:
-            percent = float(input(f"What is the percentage for {y}? Enter as a decimal\n"))
+            num = float(input(f"What is the percentage for {y}? Omit '%'\n"))
+            percent = toPercent(num)
             percents.append(percent)
         # When loop is done, see if all percents are correct (add up to 100)
         total = 0
@@ -106,14 +107,19 @@ def budget(): # NOT DONE YET
             print("It seems like that the percentages you entered don't add to 100%.\nPlease try again.")
             continue
         # if all percents good, leave while loop and start doing the math
-    # Get Ms. LaRose's help on being able to work on two lists at once
+    for x, i in enumerate(catigories):
+        budget = salary * percents[x]
+        budgets.append(budget)
     # Tell user final results
+    print("Every month, you should budget:")
+    for x, i in enumerate(catigories):
+        print(f"{budgets[x]} for {catigories[x]}")
 
 # Sale price: Get BASE ORIGINAL price and the discount. tell user new price
 def onSale():
-    og_price = float(input("What is the original price of the item? Omit '$' and commas\n"))
+    og_price = float(input("What is the original price of the item? Omit '$' and commas.\n"))
     int_sale = float(input("What is the discount in the item? Omit '%'\n"))
-    percent = int_sale / 100
+    percent = toPercent(int_sale)
 
     def subtractDiscount():
         nonlocal og_price
@@ -124,11 +130,28 @@ def onSale():
         return new_price
     discounted = subtractDiscount()
     print(f"The item now costs ${discounted:.2f}")
-    # Call greet func
 
 # Tip: Get the amount and how much of a tip they want to leave. Tell user tip amount and what the final total would then be
 def leaveTip():
-    pass
+    bill = float(input("How much is the bill? Omit '$' and commas.\n"))
+    get_tip = float(input("How much of a tip do you want to leave? Enter as a number and omit '%'\n"))
+    tip = toPercent(get_tip)
+    tip_money = bill * tip
+    
+    def addPercent():
+        nonlocal bill
+        nonlocal tip
+        nonlocal tip_money
+
+        new_price = bill + tip_money
+        return new_price
+    tipped_bill = addPercent()
+    print(f"An {get_tip:.2f}% tip on a ${bill:.2f} is ${tip_money:.2f}. That brings the total to ${tipped_bill:.2f}.")
+
+# convert num to decimal
+def toPercent(num):
+    decimal = num / 100
+    return decimal
 
 # Greet: Greet the user and have a menu corresponding to the different calculations that could be done
 def greet():
@@ -141,16 +164,15 @@ def greet():
         if choice == 1:
             saving()
         elif choice == 2:
-            # call coumpond intrest
-            pass
+            compound()
         elif choice == 3:
-            # call budget
+            budget()
             pass
         elif choice == 4:
-            # call sale
+            onSale()
             pass
         elif choice == 5:
-            # call tip
+            leaveTip()
             pass
         elif choice == 6:
             # user is leaving
