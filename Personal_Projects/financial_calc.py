@@ -57,24 +57,22 @@ def compound():
     years = round(get_years, 2)
     # Get the intrest rate
     get_intrest = float(input("What is the intrest rate? Omit '%'.\n"))
-    percent = toPercent(get_intrest)
-    intrest = round(percent, 2)
-    #int_intrest = intrest*100
+    intrest = toPercent(get_intrest)
+    #intrest = round(percent, 2)
 
     # Setting up the parts to be used in equation
     def equation():
-        fraction = intrest / 12
-        roun_frac = round(fraction, 2)
-        exponant = 12 * years
+        nonlocal intrest
+        nonlocal money
+        nonlocal years
 
-        ending_money = money*((1+roun_frac)**exponant)
+        ending_money = money * (1 + intrest/100) ** (years*100)
         rounded_money = round(ending_money, 2)
-
         return rounded_money
     end = equation()
 
     # Tell how many weeks
-    print(f"If you leave ${money} in for {years} years with an intrest rate of {get_intrest}%, you will have ${end:,}.")
+    print(f"If you leave ${money:,} in for {years} years with an intrest rate of {get_intrest:.2f}%, you will have ${end}.")
 
 # Budget allocator: Get user's catigories and percent for each one, as well as salary. Make sure percents are exactly 100. divide salary into different catigories then tell the user what the math results are
 def budget(): # NOT DONE YET
@@ -112,13 +110,19 @@ def budget(): # NOT DONE YET
         budgets.append(budget)
     # Tell user final results
     print("Every month, you should budget:")
-    for x, i in enumerate(catigories):
-        print(f"{budgets[x]} for {catigories[x]}")
+    for y, i in enumerate(catigories):
+        print(f"${budgets[y]} for {catigories[y]}")
 
 # Sale price: Get BASE ORIGINAL price and the discount. tell user new price
 def onSale():
-    og_price = float(input("What is the original price of the item? Omit '$' and commas.\n"))
-    int_sale = float(input("What is the discount in the item? Omit '%'\n"))
+    while True:
+        og_price = float(input("What is the original price of the item? Omit '$' and commas.\n"))
+        int_sale = float(input("What is the discount in the item? Omit '%'\n"))
+        if int_sale > 100:
+            print("That is too big of a discount. Try again.")
+            continue
+        else:
+            break
     percent = toPercent(int_sale)
 
     def subtractDiscount():
@@ -157,7 +161,7 @@ def toPercent(num):
 def greet():
     name = input("Welcome! Before continuing, what is your name?\n").strip().title()
     while True:
-        time.sleep(2)
+        time.sleep(1)
         print(f"\nWelcome {name}! What kind of calculation would you like to preform?")
         print("(1) Time for a Saving Goal\n(2) Calculate Compound Intrest on a Deposit\n(3) Budget based on Salary\n(4) Calculate Price for an Item on Sale\n(5) Calculate a Tip to Leave\n(6) Leave Program")
         choice = int(input("Enter the number corresponding to what you want to do.\n"))
