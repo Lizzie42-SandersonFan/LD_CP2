@@ -95,8 +95,8 @@ def budget(): # NOT DONE YET
             percents.append(percent)
         # When loop is done, see if all percents are correct (add up to 100)
         total = 0
-        for num in percents:
-            total += num
+        for a in percents:
+            total += a
         if total == 1:
             # all percents are valid
             break
