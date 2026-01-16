@@ -1,21 +1,6 @@
 # LD 1st Personal Library Program
 import time
 
-# OVERVIEW
-# Create a program that allows user to manage a personal library catalog for any ONE type (books, movies, music, etc). The project needs to allow users to add new items, display ALL contents, search for a specific item (by title, author/artist/director), remove a book from the library, exit the program. 
-
-# STEPS
-# Stores all items in a list
-# Function to add a new item
-# Function to search the items
-# Function to remove an item
-# Function that runs the code (displays the menu options inside and calls the functions inside of a while True loop)
-# Project must include
-    # easy to understand variable and function names
-    # Pseudocode comments explaining what the code is doing
-    # Good use of white space to keep items separate and easy to read/find
-
-
 # FUNCTIONS
 
 # Run game: First build all iner functions. Then establish the list of books. Have a while loop running the program with the option to add, view, remove, search, and leave
@@ -33,20 +18,76 @@ def personalLibrary():
 
     # Remove Items: Ask user for book title and author. look in list for item. Ask user if this is the item they want to remove. if yes, remove it from list. If no, either restart removing process or ask user if they want to go back to main menu
     def removeItem():
-        pass
+        nonlocal library
+
+        if not library:
+            print("You don't have anything in you library to remove! Try a different action.")
+            return
+        while True:
+            title = input("Title of Book: \n").strip().title()
+            author = input("Author of Book: \n").strip().title()
+            book = f"'{title}' by {author}"
+            remove = input(f"Is this the book you want to remove? \n{book} (Y/N)\n").strip().upper()
+            if remove == "Y":
+                if book in library:
+                    library.remove(book)
+                    print(f"You removed {book}")
+                    break
+                else:
+                    print(f"Could not find {book} in your library. Check your spelling and try again.")
+                    continue
+            elif remove == "N":
+                while True:
+                    again = input("Do you want to try removing AGAIN or LEAVE? (type the uppercase action you want to do)").strip().upper()
+                    if again == "AGAIN":
+                        break
+                    elif again == "LEAVE":
+                        break
+                    else:
+                        print("That seems to be an invalid input. Try again.")
+                        continue
+                # Left the loop for doing remove again, no to see if they left or are staying
+                if again == "AGAIN":
+                    continue
+                elif again == "LEAVE":
+                    break
+                else:
+                    print("What in world did you do?!?!?!")
+            else:
+                print("That seems to be an invalid input. Try again.")
+                continue
 
 
     # View: print the list, NICELY
     def viewLibrary():
         nonlocal library
+
+        if not library:
+            print("You don't have anything in you library to view! Try a different action.")
+            return
         print("This is your current catalog:")
         for item in library:
             print(item)
 
     # Search for something: ask user for a word to search by. Look through list and find all instances with that word. Print each item with that word
     def searchLibrary():
-        pass
+        nonlocal library
 
+        if not library:
+            print("You don't have anything in you library to search for! Try a different action.")
+            return
+        while True:
+            search = input("What would you like to search for?").strip().title()
+            print(f"Items containing '{search}':")
+            for item in library:
+                if search in item:
+                    print({item})
+            again = input("Would you like to do another search? (Y/N)").strip().upper()
+            if again == "Y":
+                continue
+            else:
+                break
+    
     library = []
     delay = 0.04
 
@@ -61,7 +102,7 @@ def personalLibrary():
         for char in show:
             print(char, end="", flush = True)
             time.sleep(delay)
-        choice = input("Enter the number corresponding to what yyou want to do.\n").strip().upper()
+        choice = input("Enter the number corresponding to what you want to do.\n").strip().upper()
         if choice == "1":
             addItem()
         elif choice == "2":
@@ -71,7 +112,7 @@ def personalLibrary():
         elif choice == "4":
             searchLibrary()
         elif choice == "5":
-            print("How you were able to build an amazing catalog of books!")
+            print("Hope you were able to build an amazing catalog of books!")
             break
         else:
             print("That doesn't seem to be a valid input; please try again.")
