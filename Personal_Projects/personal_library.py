@@ -57,7 +57,6 @@ def personalLibrary():
                 print("That seems to be an invalid input. Try again.")
                 continue
 
-
     # View: print the list, NICELY
     def viewLibrary():
         nonlocal library
@@ -81,7 +80,7 @@ def personalLibrary():
             print(f"Items containing '{search}':")
             for item in library:
                 if search in item:
-                    print({item})
+                    print(item)
             again = input("Would you like to do another search? (Y/N)").strip().upper()
             if again == "Y":
                 continue
