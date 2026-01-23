@@ -38,74 +38,29 @@ def random_password():
                 continue
         return int(length)
     
-    # func for uppercase needed. Yes/No. return yes/no
-    def pass_upper():
+    # func for getting parameters. Return Y or N
+    def parameter(para):
         while True:
-            upper = input("Would you like uppercase in your password (Y/N)\n").strip().upper()
-            if upper == "Y":
-                print("Uppercase will be included in your password\n")
+            included = input(f"Would you like {para} in your password? (Y/N)\n").strip().upper()
+            if included == "Y":
+                print(f"The program will include {para} in your password\n")
                 break
-            elif upper == "N":
-                print("Uppercase will not be included in your password\n")
+            elif included == "N":
+                print(f"The program will not include {para} in your password\n")
                 break
             else:
                 print("You seem to have entered something other than Y or N. Try again")
                 continue
-        return upper
-    
-    # func for lowercase needed. Yes/No. return yes/no
-    def pass_lower():
-        while True:
-            lower = input("Would you like lowercase in your password (Y/N)\n").strip().upper()
-            if lower == "Y":
-                print("Lowercase will be included in your password\n")
-                break
-            elif lower == "N":
-                print("Lowercase will not be included in your password\n")
-                break
-            else:
-                print("You seem to have entered something other than Y or N. Try again")
-                continue
-        return lower
-    
-    # func for numbers needed. Yes/No. return yes/no
-    def pass_number():
-        while True:
-            number = input("Would you like numbers in your password (Y/N)\n").strip().upper()
-            if number == "Y":
-                print("Numbers will be included in your password\n")
-                break
-            elif number == "N":
-                print("Numbers will not be included in your password\n")
-                break
-            else:
-                print("You seem to have entered something other than Y or N. Try again")
-                continue
-        return number
-    
-    # func for special characters needed. Yes/No. return yes/no
-    def pass_special_char():
-        while True:
-            special_char = input("Would you like special characters in your password (Y/N)\n").strip().upper()
-            if special_char == "Y":
-                print("Special characters will be included in your password\n")
-                break
-            elif special_char == "N":
-                print("Special characters will not be included in your password\n")
-                break
-            else:
-                print("You seem to have entered something other than Y or N. Try again")
-                continue
-        return special_char
+        return included
 
     # func for assembly. The secrets library. Picks a random item without it being known
     # I was having a problem with the passwords being too long. It corresponded to the number of times there was a "Y" (weird math thing. I know why, but can't deal with it in a reasonable short way). To fix this, I truncated the string to the requested length.
     def assemble():
         the_length = pass_length()
-        upper_yes = pass_upper()
-        lower_yes = pass_lower()
-        num_yes = pass_number()
-        special_char_yes = pass_special_char() 
+        upper_yes = parameter("uppercase letters")
+        lower_yes = parameter("lowercase letters")
+        num_yes = parameter("numbers")
+        special_char_yes = parameter("special characters")
         num = 1
         
         while num <= 4:
