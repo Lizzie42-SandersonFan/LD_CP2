@@ -1,4 +1,5 @@
 # LD 1st Random Passowrd Generator
+import secrets
 import time
 delay = 0.06
 
@@ -14,7 +15,6 @@ delay = 0.06
     # lowercase letters
     # numbers
     # special characters
-# HINT: You can make this by randomly selecting from different lists OR by randomly generating the ASCII letters! 
  
 # Main Func: Build inner functions, greet user, ask user for password paramiters. Use inner functions to build four different passwords. Show user the four different passwords
 def random_password():
@@ -23,12 +23,16 @@ def random_password():
         while True:
             length = input("How long would you like your password to be (Whole number)?\n").strip().upper()
             if length.isdigit() == True:
-                if int(length) == True:
-                    # User gave a valid number
-                    break
-                else:
-                    print("You seemed to have entered a number, but it's not a whole number. Try again")
+                if float(length) <= 4.0:
+                    print("Password can not be that short. Try again")
                     continue
+                else:
+                    if int(length) % 1 == 0:
+                        # User gave a valid number
+                        break
+                    else:
+                        print("You seemed to have entered a number, but it's not a whole number. Try again")
+                        continue
             else:
                 print("You seem to have entered something other than a number. Try again")
                 continue
@@ -39,10 +43,10 @@ def random_password():
         while True:
             upper = input("Would you like uppercase in your password (Y/N)\n").strip().upper()
             if upper == "Y":
-                print("Uppercase will be included in your password")
+                print("Uppercase will be included in your password\n")
                 break
             elif upper == "N":
-                print("Uppercase will not be included in your password")
+                print("Uppercase will not be included in your password\n")
                 break
             else:
                 print("You seem to have entered something other than Y or N. Try again")
@@ -54,10 +58,10 @@ def random_password():
         while True:
             lower = input("Would you like lowercase in your password (Y/N)\n").strip().upper()
             if lower == "Y":
-                print("Lowercase will be included in your password")
+                print("Lowercase will be included in your password\n")
                 break
             elif lower == "N":
-                print("Lowercase will not be included in your password")
+                print("Lowercase will not be included in your password\n")
                 break
             else:
                 print("You seem to have entered something other than Y or N. Try again")
@@ -69,10 +73,10 @@ def random_password():
         while True:
             number = input("Would you like numbers in your password (Y/N)\n").strip().upper()
             if number == "Y":
-                print("Numbers will be included in your password")
+                print("Numbers will be included in your password\n")
                 break
             elif number == "N":
-                print("Numbers will not be included in your password")
+                print("Numbers will not be included in your password\n")
                 break
             else:
                 print("You seem to have entered something other than Y or N. Try again")
@@ -84,42 +88,69 @@ def random_password():
         while True:
             special_char = input("Would you like special characters in your password (Y/N)\n").strip().upper()
             if special_char == "Y":
-                print("Special characters will be included in your password")
+                print("Special characters will be included in your password\n")
                 break
             elif special_char == "N":
-                print("Special characters will not be included in your password")
+                print("Special characters will not be included in your password\n")
                 break
             else:
                 print("You seem to have entered something other than Y or N. Try again")
                 continue
         return special_char
 
-    # func for assembly. I need to figure this out
+    # func for assembly. The secrets library. Picks a random item without it being known
+    # I was having a problem with the passwords being too long. It corresponded to the number of times there was a "Y" (weird math thing. I know why, but can't deal with it in a reasonable short way). To fix this, I truncated the string to the requested length.
     def assemble():
-        pass_length()
-        pass_upper()
-        pass_lower()
-        pass_number()
-        pass_special_char() 
-        # How doth one do this?
-        # I know I need to use the parameters from the functions to determine what to pull from all the lists, but how do I know how many from each? Maybe random numbers?
+        the_length = pass_length()
+        upper_yes = pass_upper()
+        lower_yes = pass_lower()
+        num_yes = pass_number()
+        special_char_yes = pass_special_char() 
+        num = 1
+        
+        while num <= 4:
+            password_list = []
+            for _ in range(the_length):
+                if upper_yes == "Y":
+                    password_list.append(secrets.choice(upper_letters))
+                if lower_yes == "Y":
+                    password_list.append(secrets.choice(lower_letters))
+                if num_yes == "Y":
+                    password_list.append(secrets.choice(numbers))
+                if special_char_yes == "Y":
+                    password_list.append(secrets.choice(special_chars))
+            # Make list into string so it can be shortened
+            password = "".join(password_list)
+            shortened_password = password[:the_length]
+            # With how characters are added, I want to make sure that everything the user requested is in there and those requests end up at the front. Can't be randomized yet so that I know at least one request ends up in there
+            # Make shortened string back into list so that it can be randomized now
+            shortened_password = list(shortened_password)
+            secrets.SystemRandom().shuffle(shortened_password)
+            # Turn shortened AND randomized list back into a string to be printed
+            final_password = "".join(shortened_password)
+            print(f"Password {num}: {final_password}")
+            num += 1
+        
 
     upper_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     lower_letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     special_chars = ["`", "~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", "{", "}", "[", "]", "|", "\\", ":", ";", "'", '"', "<", ">", ",", ".", "?", "/"]
 
-    greet = "Welcome user! This program will generate four random passwords for you to use based on parameters YOU choose! Let's get started!"
+    greet = "Welcome user!\nThis program will generate four random passwords for you to use based on parameters YOU choose!\nLet's get started!\n"
     for char in greet:
         print(char, end="", flush = True)
         time.sleep(delay)
     
     while True:
-        action = input("Type the number for what you would like to do:\n1. Generate Random Passwords\n2. Leave Program")
+        action = input("Type the number for what you would like to do:\n1. Generate Random Passwords\n2. Leave Program\n")
         if action == "1":
             assemble()
         elif action == "2":
-            print("Thank you for using the program! Good-bye!")
+            print("Thank you for using the program! Good bye!")
             break
         else:
-            pass
+            print("Invalid input. Try again")
+            continue
+
+random_password()
