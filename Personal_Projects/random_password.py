@@ -86,6 +86,17 @@ def random_password():
             print(f"Password {num}: {final_password}")
             num += 1
         
+    def main():
+        while True:
+            action = input("Type the number for what you would like to do:\n1. Generate Random Passwords\n2. Leave Program\n")
+            if action == "1":
+                assemble()
+            elif action == "2":
+                print("Thank you for using the program! Good bye!")
+                break
+            else:
+                print("Invalid input. Try again")
+                continue
 
     upper_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     lower_letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
@@ -97,15 +108,6 @@ def random_password():
         print(char, end="", flush = True)
         time.sleep(delay)
     
-    while True:
-        action = input("Type the number for what you would like to do:\n1. Generate Random Passwords\n2. Leave Program\n")
-        if action == "1":
-            assemble()
-        elif action == "2":
-            print("Thank you for using the program! Good bye!")
-            break
-        else:
-            print("Invalid input. Try again")
-            continue
+    main()
 
 random_password()
