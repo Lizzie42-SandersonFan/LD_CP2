@@ -27,7 +27,7 @@ import time
 # VARIABLES
 delay = 0.06
 english_letters = ("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
-morse_code = (" .-", " -...", " -.-.", " -..", " .", " ..-.", " --.", " ....", " ..", " .---", " -.-", " .-..", " --", " -.", " ---", " .--.", " --.-", " .-.", " ...", " -", " ..-", " ...-", " .--", " -..-", " -.--", " --..", " .----", " ..---", " ...--", " ....-", " .....", " -....", " --...", " ---..", " ----.", " -----")
+morse_code = (".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----.", "-----")
 
 # FUNCTIONS
 def type_print(string):
@@ -44,8 +44,20 @@ def mc_2_eng():
     # IF that item cannot be found in the list, take that item and just imediatly append it into translation list
     # 4. Once translation list is done, convert it into a string
     # 5. return final translation string
-    pass
+    string = input("Type or Coppy/Paste the morse code you need translated:\n").strip()
+    for item in string.split(' '):
+        if item in morse_code:
+            index = morse_code.index(item)
+            letter = english_letters[index]
+            translation.append(letter)
+        elif item == "":
+            translation.append(" ")
+        else:
+            translation.append(item)
+    final_translation = "".join(translation)
+    return final_translation
 
+# .... . .-.. .-.. ---   .-- --- .-. .-.. -..
 def eng_2_mc():
     translation = []
     # Steps: 
@@ -55,29 +67,37 @@ def eng_2_mc():
     # IF that item cannot be found in the list, take that item and just imediatly append it into translation list
     # 4. Once translation list is done, convert it into a string
     # 5. return final translation string
-    pass
+    string = input("Type or Coppy/Paste the english you need translated:\n").strip().upper()
+    for item in string:
+        if item in english_letters:
+            index = english_letters.index(item)
+            letter = morse_code[index]
+            translation.append(letter)
+            translation.append(" ")
+        else:
+            translation.append(item)
+            translation.append(" ")
+    final_translation = "".join(translation)
+    return final_translation
 
 # Main run loop. Greet, ask user what they would like to do
 def main():
-    greet = "Hello user!\nThis program is a morse code translator,\nand will allow you to translate to and from morse code to english!\n"
+    greet = "Hello user!\nThis program is a morse code translator\nand will allow you to translate to and from morse code and english!\n"
     type_print(greet)
     while True:
-        show_choice = "\nWhat would you like to do:\n1) Translate English to Morse Code\n2) Translate Morse Code to English\n3) Leave\n"
-        type_print(show_choice)
+        type_print("\nWhat would you like to do:\n1) Translate English to Morse Code\n2) Translate Morse Code to English\n3) Leave\n")
         action = input("Enter the number corresponding to what you want to do\n")
         if action == "1":
-            eng_2_mc()
+            translate = eng_2_mc()
+            type_print(f"Your message says: {translate}\n")
         elif action == "2":
-            mc_2_eng()
+            translated = mc_2_eng()
+            type_print(f"Your message says: {translated}\n")
         elif action == "3":
-            leave = "Thank you for using this program! Have a nice day!\n"
-            type_print(leave)
+            type_print("Thank you for using this program! Have a nice day!\n")
             break
         else:
-            invalid = "It seems you have entered an invalid input. Try again\n"
-            type_print(invalid)
+            type_print("It seems you have entered an invalid input. Try again\n")
             continue
 
 main()
-# IDEAS:
-# Could I use a turn a string into a list? Then with the morse code, each item in the list is determined if there is a space at the end
