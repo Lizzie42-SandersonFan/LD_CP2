@@ -1,5 +1,6 @@
 # LD 1st Personal Project, Movie Recomender
 import time
+import csv
 
 # REQUIREMENTS
     # A main function that runs the program and shows a persistent menu.
@@ -31,34 +32,63 @@ def type_print(string, delay = 0.06):
         print(char, end="", flush = True)
         time.sleep(delay)
 
-# Main function. Displays menu. Options are: Search, Print EVERYTHING, Exit
+# Main function. Displays menu. Options are: Search, Print EVERYTHING, Exit. Has inner functions
 def main():
+    movies_found = []
+    # The Parser function (Requierment 2)
+
+    # Filter funtion for Genre. This will ask for a genre like "romance" or sm and grab everything that has the genre "Romance" IN IT
+    def find_genre():
+        genre = input("What is the genre you are looking for (ex: 'Science Fiction,' 'Romance')\n").strip().lower()
+        try:
+            with open("Personal_Projects/Movies_list.csv", "r") as csv_file:
+                content = csv.reader(csv_file)
+                headers = next(content)
+                rows = []
+                for line in content:
+                    rows.append({headers[0]: line[0], headers[1]: line[1]})
+        except:
+            print("Something went wrong with reading the file")
+
+    # Filter for Director. This will take in a name (or part of a name) and find every movie with the name in the DIRECTOR'S name
+
+    # Filter for Actor. Same as director but look in the ACTOR'S name
+
+    # Filter for length. Take in a min and/or max and find the movies that fit in the range. IF no min given, min = 0. IF no max given, max = 200 (Every movie in CSV is shorter than that)
+    def length_filter():
+        while True:
+            min = input("What would you like the minimum length in minutes to be (put a space if you don't want a minimum)\n")
+            if min.isdigit() == True and min.isdigit() % 1 == 0:
+                min = int(min)
+            else:
+                pass
+
+
+    # THE FILTERING INVOLVING STRINGS SHOULD BE ONE FUNCTION
+    def string_filter(finding):
+        searching = input("")
+
+    # Function that is the one asking for the parameters and will use the results from the calling to get the movies that fit all parameters. Return this list that fit parameters
+    def find_filters():
+        type_print("Choose the filters you would like to apply (enter them separated by spaces):\n 1) Genre\n2) Director\n3) Actor\n 4) Length (min and/or max)\nExample entry: '1 2 4'")
+        filters = input("Type the numbers for your filters:\n").strip().lower()
+        #
+
+    # Function to print very nicely
+
     type_print("Welcome user to a program that will let you search through a catolog of movies!\n")
     while True:
-        type_print("What woudl you like to do:\n1) Search with Parameters\n2) Print Entire Movie List\n3) Leave")
-        action = input("Type the number corresponding to what you want to do:\n")
+        type_print("What would you like to do:\n1) Search with Parameters\n2) View Entire Movie List\n3) Leave\n")
+        action = input("Type the number corresponding to what you want to do:\n").strip().lower()
         if action == "1":
-            pass
+            print("user searching with parameters")
         elif action == "2":
-            pass
+            print("user viewing whole list")
         elif action == "3":
-            pass
+            print("user leaving")
+            break
         else:
-            pass
+            print("Invalid input. Please try again")
+            continue
 
-
-# The Parser function (Requierment 2)
-
-# Filter funtion for Genre. This will ask for a genre like "romance" or sm and grab everything that has the genre "Romance" IN IT
-
-# Filter for Director. This will take in a name (or part of a name) and find every movie with the name in the DIRECTOR'S name
-
-# Filter for Actor. Same as director but look in the ACTOR'S name
-
-# Filter for length. Take in a min and/or max and find the movies that fit in the range. IF no min given, min = 0. IF no max given, max = 200 (Every movie in CSV is shorter than that)
-
-# THE FILTERING INVOLVING STRINGS SHOULD BE ONE FUNCTION
-
-# Function that is the one asking for the parameters and will use the results from the calling to get the movies that fit all parameters. Return this list that fit parameters
-
-# Function to print very nicely
+main()
