@@ -46,7 +46,7 @@ def main():
                 headers = next(content)
                 rows = []
                 for line in content:
-                    rows.append({headers[0]: line[0], headers[1]: line[1]})
+                    rows.append({headers[0]: line[0], headers[1]: line[1], headers[2]: line[2], headers[3]: line[3], headers[4]: line[4], headers[5]: line[5]})
         except:
             print("Something went wrong with reading the file")
 
@@ -57,9 +57,9 @@ def main():
     # Filter for length. Take in a min and/or max and find the movies that fit in the range. IF no min given, min = 0. IF no max given, max = 200 (Every movie in CSV is shorter than that)
     def length_filter():
         while True:
-            min = input("What would you like the minimum length in minutes to be (put a space if you don't want a minimum)\n")
-            if min.isdigit() == True and min.isdigit() % 1 == 0:
-                min = int(min)
+            min = input("What would you like the minimum length in minutes to be (put a space if you don't want a minimum)\n").strip().lower()
+            if min.isdigit() == True:
+                min = float(min)
             else:
                 pass
 
@@ -91,4 +91,5 @@ def main():
             print("Invalid input. Please try again")
             continue
 
-main()
+# main()
+# TESTING INDIVIDUAL PARTS
