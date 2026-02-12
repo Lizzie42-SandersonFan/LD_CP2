@@ -1,27 +1,50 @@
 # LD 1st Personal Library Program
 import time
+import csv
+# import pandas
 
+# RELOGIC THINGS. Current run has a list that AT THE END is added to the csv. Fix stuff
 # FUNCTIONS
 
 # Run game: First build all iner functions. Then establish the list of books. Have a while loop running the program with the option to add, view, remove, search, and leave
 def personalLibrary():
-
+    # Function that will check if there is anything in the csv. That way, nothing crashes if the user tries to edit the library with nothing in it
+    def csv_has_stuff(path):
+        try:
+            with open(path, "r") as file:
+                try:
+                    content = file.read()
+                    headers = next(content)
+                    return True
+                except StopIteration:
+                    return False
+        except:
+            print("There was a problem reading the file. Do not know if there is stuff in the file")
     # Add items: First, ask the user for book title. Then ask user for author. Combine thoes two into one item. Append that combined item. Done
     def addItem():
-        nonlocal library
-
         title = input("Title of Book: \n").strip().title()
         author = input("Author of Book: \n").strip().title()
-        book = f"'{title}' by {author}"
-        print(f"You added the book {book}")
-        library.append(book)
+        while True:
+            year = input("What year was this book published:\n").strip().lower()
+            if int(year) == False and len(year) != 4:
+                print("Invalid year. Please try again")
+                continue
+            else:
+                break
+        genre = input("What is the genre for this book:\n").strip().title()
+        try:
+            with open("Personal_Projects/the_personal_libraray.csv", "a", newline="") as csvfile:
+                fieldnames = ['title', 'author', 'publish year', 'genre']
+                writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+                writer.writerow({'title': title, 'author': author, 'publish year': year, 'genre': genre})
+        except:
+            print("Encountered a file issue.\nReturning to main menu to try again")
+        print(f"You added the book: '{title}' by {author}")
 
     # Remove Items: Ask user for book title and author. look in list for item. Ask user if this is the item they want to remove. if yes, remove it from list. If no, either restart removing process or ask user if they want to go back to main menu
     def removeItem():
-        nonlocal library
-
-        if not library:
-            print("You don't have anything in you library to remove! Try a different action.")
+        if csv_has_stuff("Personal_Projects/the_personal_libraray.csv") == False:
+            print("You don't have a libaray to edit! Try adding something before removing.")
             return
         while True:
             title = input("Title of Book: \n").strip().title()
@@ -57,12 +80,10 @@ def personalLibrary():
                 print("That seems to be an invalid input. Try again.")
                 continue
 
-    # View: print the list, NICELY
+    # View: show either simple (Title + author) or detailed (everything)
     def viewLibrary():
-        nonlocal library
-
-        if not library:
-            print("You don't have anything in you library to view! Try a different action.")
+        if csv_has_stuff("Personal_Projects/the_personal_libraray.csv") == False:
+            print("You don't have a libaray to edit! Try adding something before removing.")
             return
         print("This is your current catalog:")
         for item in library:
@@ -70,10 +91,8 @@ def personalLibrary():
 
     # Search for something: ask user for a word to search by. Look through list and find all instances with that word. Print each item with that word
     def searchLibrary():
-        nonlocal library
-
-        if not library:
-            print("You don't have anything in you library to search for! Try a different action.")
+        if csv_has_stuff("Personal_Projects/the_personal_libraray.csv") == False:
+            print("You don't have a libaray to search! Try adding something before removing.")
             return
         while True:
             search = input("What would you like to search for?").strip().title()
@@ -87,6 +106,9 @@ def personalLibrary():
             else:
                 break
     
+    # Function to update item
+
+    # Reload the libary. Current run has a list of things the user wants to add and if this is called, clear the list and dont add it to the csv
     library = []
     delay = 0.04
 
