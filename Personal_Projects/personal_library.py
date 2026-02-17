@@ -22,6 +22,8 @@ def personalLibrary():
             print("There was a problem reading the file. Do not know if there is stuff in the file")
     # Add items: First, ask the user for book title. Then ask user for author. Combine thoes two into one item. Append that combined item. Done
     def addItem():
+        nonlocal library
+        
         title = input("Title of Book: \n").strip().title()
         author = input("Author of Book: \n").strip().title()
         while True:
@@ -32,13 +34,6 @@ def personalLibrary():
             else:
                 break
         genre = input("What is the genre for this book:\n").strip().title()
-        try:
-            with open("Personal_Projects/the_personal_libraray.csv", "a", newline="") as csvfile:
-                fieldnames = ['title', 'author', 'publish year', 'genre']
-                writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
-                writer.writerow({'title': title, 'author': author, 'publish year': year, 'genre': genre})
-        except:
-            print("Encountered a file issue.\nReturning to main menu to try again")
         print(f"You added the book: '{title}' by {author}")
 
     # Remove Items: Ask user for book title and author. look in list for item. Ask user if this is the item they want to remove. if yes, remove it from list. If no, either restart removing process or ask user if they want to go back to main menu
