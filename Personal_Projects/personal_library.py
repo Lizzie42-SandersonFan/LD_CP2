@@ -1,9 +1,8 @@
 # LD 1st Personal Library Program
 import time
 import csv
-# import pandas
+import os
 
-# RELOGIC THINGS. Current run has a list that AT THE END is added to the csv. Fix stuff
 # FUNCTIONS
 
 # Run game: First build all iner functions. Then establish the list of books. Have a while loop running the program with the option to add, view, remove, search, and leave
@@ -27,10 +26,8 @@ def personal_library():
                     return False
         except:
             print("There was a problem reading the file. Do not know if there is stuff in the file")
-    # Add items: First, ask the user for book title. Then ask user for author. Combine thoes two into one item. Append that combined item. Done
-    def add_item():
-        nonlocal library
-        
+
+    def get_book_info():
         title = input("Title of Book: \n").strip().title()
         author = input("Author of Book: \n").strip().title()
         while True:
@@ -42,6 +39,27 @@ def personal_library():
                 break
         genre = input("What is the genre for this book:\n").strip().title()
         notes = input("Any notes for this book (if none, put a space)").strip().capitalize()
+        return title, author, year, genre, notes
+    
+    def rewrite_csv(requirement1, requirment2, new_data):
+        temp_filename = "temp_personal_library.csv"
+        with open("Personal_Projects/the_personal_libraray.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+            reader = csv.reader(infile)
+            fieldnames = ['title', 'author', 'publish year', 'genre', 'notes']
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+
+            for row in reader:
+                if requirement1 in row and requirment2 in row:
+                    # updating an item
+                    writer.writerow(new_data)
+                else:
+                    writer.writerow(row)
+            os.replace(temp_filename, "the_personal_libraray.csv")
+    # Add items: First, ask the user for book title. Then ask user for author. Combine thoes two into one item. Append that combined item. Done
+    def add_item():
+        nonlocal library
+        
+        title, author, year, genre, notes = get_book_info()
         library.append({'title': title, 'author': author, 'publish year': year, 'genre': genre, 'notes': notes})
         print(f"You added the book: '{title}' by {author}")
 
@@ -172,8 +190,8 @@ def personal_library():
                 else:
                     print("Invalid input. Try again")
                     continue
-            title = input("Title of Book: \n").strip().title()
-            author = input("Author of Book:\n").strip().title()
+            old_title = input("Title of Book: \n").strip().title()
+            old_author = input("Author of Book:\n").strip().title()
             if file_choice == "1":
                 # Updating something in run library
                 for item in library:
@@ -184,17 +202,7 @@ def personal_library():
                             update = input(f"Do you wish to update '{item['title']}' by {item['author']} (Y/N)?\n").strip().upper()
                             if update == "Y":
                                 library.remove(item)
-                                title = input("Title of Book: \n").strip().title()
-                                author = input("Author of Book: \n").strip().title()
-                                while True:
-                                    year = input("What year was this book published:\n").strip().lower()
-                                    if int(year) == False and len(year) != 4:
-                                        print("Invalid year. Please try again")
-                                        continue
-                                    else:
-                                        break
-                                genre = input("What is the genre for this book:\n").strip().title()
-                                notes = input("Any notes for this book (if none, put a space)").strip().capitalize()
+                                title, author, year, genre, notes = get_book_info()
                                 library.append({'title': title, 'author': author, 'publish year': year, 'genre': genre, 'notes': notes})
                                 print(f"Update Complete\nReturning to main menu . . .")
                                 return
@@ -230,8 +238,22 @@ def personal_library():
                                     print(f"Found: {row}")
                                     updated = input("Do you wish to update it (Y/N)?\n").strip().upper()
                                     if updated == "Y":
-                                        # get new information. Read csv, check if row is one we want to change: no, append into list of rows we want to save. yes: dont add it and add updated item to list of rows to write. Rewrite entire file.
-                                        pass
+                                        # Updating row. Get new info, open two files, for row in old file check if should be replaced and replace it, if not needing replacing write the row. Replace old file with new updated one
+                                        new_title, new_author, new_year, new_genre, new_notes = get_book_info()
+                                        temp_filename = "temp_personal_library.csv"
+                                        with open("Personal_Projects/the_personal_libraray.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+                                            reader = csv.reader(infile)
+                                            fieldnames = ['title', 'author', 'publish year', 'genre', 'notes']
+                                            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+
+                                            for row in reader:
+                                                if title in row and author in row:
+                                                # updating an item
+                                                    writer.writerow({'title': new_title, 'author': new_author, 'publish year': new_year, 'genre': new_genre, 'notes': new_notes})
+                                                    break
+                                                else:
+                                                    writer.writerow(row)
+                                        os.replace(temp_filename, "the_personal_libraray.csv")
                                     elif updated == "N":
                                         again2 = input("Would you like to\n1) Return to Main Menu\nor\n2) Do Updating Process again")
                                         if again2 == "2":
@@ -249,6 +271,11 @@ def personal_library():
                 continue
 
     # Reload the libary. Current run has a list of things the user wants to add and if this is called, clear the list and dont add it to the csv
+    def reload():
+        library.clear()
+        removed_items.clear()
+        print("Changes reset. Returning to main menu . . .")
+        return
 
     type_print("\nWelcome! In this program, you will be able to catalog all of your books in your very own personal library!\n")
 
@@ -262,20 +289,40 @@ def personal_library():
         elif choice == "2":
             remove_item()
         elif choice == "3":
-            # Update item
-            pass
+            update_item()
         elif choice == "4":
             view_library("simple")
-            pass
         elif choice == "5":
             view_library("detailed")
-            pass
         elif choice == "6":
-            # save
-            pass
+            # First, remove the stuff the user wants out of their libaray
+            temp_filename = "temp_personal_library.csv"
+            with open("Personal_Projects/the_personal_libraray.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+                reader = csv.reader(infile)
+                fieldnames = ['title', 'author', 'publish year', 'genre', 'notes']
+                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+
+                for row in reader:
+                    for item in removed_items:
+                        if item !=  row:
+                            # the item does not match wat we want gon so we write it because we want to keep it
+                            writer.writerow(row)
+                        else:
+                            # this means that we have encountered want we want to delete. So we dont write it and go to next iteration
+                            continue
+            os.remove("the_personal_libraray.csv")
+            os.rename(temp_filename, "the_personal_libraray.csv")
+            # now that we have deleted stuff, we open the updated file and add the new stuff
+            try:
+                with open("Personal_Projects/the_personal_libraray.csv", 'a', newline='') as csv_file:
+                    fieldnames = ['title', 'author', 'publish year', 'genre', 'notes']
+                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+                    for thing in library:
+                        writer.writerow(thing)
+            except:
+                print("had a problem appending into the file in saving part of code")
         elif choice == "7":
-            # reload
-            pass
+            reload()
         elif choice == "8":
             print("Hope you were able to build an amazing catalog of books!")
             break
