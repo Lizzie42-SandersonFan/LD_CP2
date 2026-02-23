@@ -8,7 +8,7 @@ from helpers import *
 def get_file_path():
     while True:
         file_path = input("Type in the full path of the file you wish to edit\nEX: 'Personal_Projects/word counter/document.txt'")
-        if 'Personal_Projects/' in file_path and 'word counter/' in file_path:
+        if 'Personal_Projects/word counter/' in file_path:
             # File path has what I want for it to be put in the correct spot
             return file_path
         else:
@@ -29,12 +29,21 @@ def add_to_file(path):
     # Need to figure out how to let the user hit enter for their paragraphs without skipping to the next part of the code. Also need to figure out how to know that the user hit enter TWICE to then move to the next part
     try:
         with open(path, "a") as file:
-            content = file.read()
-            print(content)
+            new_stuff = input("Type what you want added to your file (Hit 'Enter' when you are done):\n")
+            file.write(f"{new_stuff}\n")
     except:
         print("That file can't read")
 
 # Function for getting word count. Will need to read current document status, count each word (separated by spaces) and return count
+def get_word_count(path):
+    try:
+        with open(path, "r") as file:
+            content = file.read()
+            words = content.split(' ')
+            word_count = len(words)
+            return word_count
+    except:
+        print("That file can't read")
 
 
 # Function for opening file???
