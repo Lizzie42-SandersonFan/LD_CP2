@@ -40,7 +40,7 @@ def main():
     wn = turtle.Screen()
     wn.bgcolor("black")
     p = [[-500, -400], [0, 500], [500, -400]]
-    sierpinski(t, 2, p)
+    sierpinski(t, 5, p)
     wn.exitonclick()
 
 main()
