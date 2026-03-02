@@ -12,7 +12,7 @@ This program will let you generate a Sierpinski Triangle with a depth of 1 to 5.
 ***
 - Main feature is being able to draw the Serpinski Triangle with Turtle 🐢
 - Line color and Background color cannot be the same ⚪⚫
-- Full choice of colors by using heaxcodes! 🔴🟠🟡🟢🔵🟣
+- Full choice of colors by using hex codes! 🔴🟠🟡🟢🔵🟣
 
 ## Contributors
 *** 
