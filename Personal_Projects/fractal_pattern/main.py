@@ -31,7 +31,7 @@ def main():
             print("Invalid input. Try again")
             continue
     while True:
-        pen_color = input("Enter the hex code for the LINE color you would like (Ex: #FFFFFF, #000000, #1656AD):\n")
+        pen_color = input("Enter the hex code for the LINE color you would like (Ex: #FFFFFF, #000000, #1656AD):\n").strip().upper()
         if is_valid_hexa_code(pen_color):
             # Valid color
             break
@@ -39,7 +39,7 @@ def main():
             print("Invalid input. Please try again")
             continue
     while True:
-        back_color = input("Enter the hex code for the BACKGROUND color you would like (Ex: #FFFFFF, #000000, #1656AD):\n")
+        back_color = input("Enter the hex code for the BACKGROUND color you would like (Ex: #FFFFFF, #000000, #1656AD):\n").strip().upper()
         if is_valid_hexa_code(back_color) and back_color != pen_color:
             # Valid color
             break

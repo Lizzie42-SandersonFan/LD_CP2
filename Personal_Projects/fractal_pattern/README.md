@@ -1,6 +1,5 @@
 # Sierpinski Triangle Generator
 ***
-![Image of code while runnign](location of image in folders)
 This program will let you generate a Sierpinski Triangle with a depth of 1 to 5.
 
 ## How to use
