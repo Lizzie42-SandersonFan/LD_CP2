@@ -1,6 +1,7 @@
 # LD 1st Fractal Pattern Generator
 import turtle
-import re
+from drawing import *
+from helpers import *
 
 # Create a Python program that generates a Sierpinski Triangle fractal pattern using recursion. The program should allow users to customize the recursion depth and color of the fractal.
 
@@ -14,36 +15,9 @@ import re
 # HINT: Remember to implement a base case in your recursive function to prevent infinite recursion!
 
 # EXTRA CREDIT
-# Allow the user to save the generated fractal as an image file (3 points)
 # Add an option to change the background color (1 point)
 
 def main():
-    turtle = turtle.Turtle()
-
-    def is_valid_hexa_code(string):
-        hexa_code = re.compile(r'^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$')
-        return bool(re.match(hexa_code, string))
-
-    def get_midpoint(point1, point2):
-        return ((point1[0] + point2[0]) / 2, (point1[1] + point2[1]) / 2)
-    
-    def draw_fancy_triforce(position):
-        nonlocal turtle
-        turtle.up()
-        turtle.goto(position[0][0], position[0][1])
-        turtle.down()
-        turtle.goto(position[1][0], position[1][1])
-        turtle.goto(position[2][0], position[2][1])
-        turtle.goto(position[0][0], position[0][1])
-
-    def recursive_draw(turt, tri_num, point):
-        draw_fancy_triforce(point)
-        if tri_num > 0:
-            recursive_draw(turt, tri_num-1, [p[0], get_midpoint(p[0], p[1]), get_midpoint(p[0], p[2])])
-            recursive_draw(turt, tri_num-1, [p[1], get_midpoint(p[0], p[1]), get_midpoint(p[1], p[2])])
-            recursive_draw(turt, tri_num-1, [p[2], get_midpoint(p[2], p[1]), get_midpoint(p[0], p[2])])
-        else:
-            return 0
     
     start_point = [[-500, -400], [0, 500], [500, -400]]
     # Greet user
@@ -66,24 +40,27 @@ def main():
             continue
     while True:
         back_color = input("Enter the hex code for the BACKGROUND color you would like (Ex: #FFFFFF, #000000, #1656AD):\n")
-        if is_valid_hexa_code(back_color) and back_color != color:
+        if is_valid_hexa_code(back_color) and back_color != pen_color:
             # Valid color
             break
         else:
             if is_valid_hexa_code(back_color) == False:
                 print("Invalid color. Try again")
                 continue
-            elif back_color == color:
+            elif back_color == pen_color:
                 print("Your background color cannot be the same as your lines. Pick a different color")
                 continue
             else:
                 print("What in world happened!?!?")
 
     # Set up turtle colors and start drawing!
-    turtle.hideturtle()
-    turtle.pencolor(pen_color)
+    my_turtle = turtle.Turtle()
+    my_turtle.hideturtle()
+    my_turtle.pencolor(pen_color)
+    my_turtle.pensize(6)
+    my_turtle.speed("fast")
     turtle.bgcolor(back_color)
-    recursive_draw(turtle, 5, start_point)
+    recursive_draw(my_turtle, depth, start_point)
     turtle.done()
     # Now figure out how the user can save it as an image
 
